@@ -16,19 +16,19 @@ const PiActions = ({ actions = [], onExecute, buttonStyle, disabled = false }) =
     <section style={{ textAlign: 'center', overflow: 'hidden' }}>
       <h2 style={{ fontSize: '32px', margin: '0 0 10px 0' }}>Pi Actions</h2>
       <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
-        {actions.map((action) => (
-          <button
-            key={action.id}
-            style={buttonStyle}
-            title={action.title || action.label}
-            onClick={() => onExecute(action.id)}
-            disabled={disabled} // Use the disabled prop
-          >
-            {action.label}
-            {/* You could add optional icons here too */}
-            {/* {action.icon && <img src={action.icon} alt="" width="20" height="20" />} */}
-          </button>
-        ))}
+      {actions.map((action) => (
+        <button
+          key={action.id} // Use id for the key
+          style={buttonStyle}
+          title={action.title || action.label}
+          // Pass the command string to the handler
+          onClick={() => onExecute(action.command)}
+          disabled={disabled}
+        >
+          {action.label}
+          {/* Optional icon */}
+        </button>
+      ))}
       </div>
     </section>
   );

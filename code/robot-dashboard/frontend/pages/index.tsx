@@ -16,7 +16,8 @@ type Status = 'connected' | 'disconnected' | 'error' | 'connecting'; // Added 'c
 interface PiActionButton {
   id: string;
   label: string;
-  title?: string;
+  title?: string
+  command: string; 
   icon?: string; // Optional icon path
 }
 
@@ -42,9 +43,9 @@ export default function Home() {
 
   // --- Configuration ---
   const piActionButtons: PiActionButton[] = [
-    { id: 'launch_pi_client', label: 'Start Pi Cam Client', title: 'Run python3 pi_client.py &' },
-    { id: 'kill_pi_client', label: 'Stop Pi Cam Client', title: 'pkill -f pi_client.py' },
-    { id: 'list_home', label: 'List Home Dir', title: 'Run ls -la ~/' },
+    { id: 'launch_pi_client', label: 'Start Pi Cam Client', title: 'Run python3 pi_client.py &', command: 'python3 pi_client.py &'},
+    { id: 'kill_pi_client', label: 'Stop Pi Cam Client', title: 'Run pkill -f pi_client.py', command: 'pkill -f pi_client.py' },
+    { id: 'list_home', label: 'List Home Dir', title: 'Run ls -la ~/', command: 'ls -la ~/' },
     // Add more buttons here matching backend allowedCommands keys
   ];
 
@@ -312,22 +313,22 @@ export default function Home() {
   };
 
   // Execute Pi Command via SSH WebSocket
-  const executePiCommand = (commandId: string) => {
+  const executePiCommand = (command: string) => { // Accept command string
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN && status === 'connected') {
-       console.log(`Requesting execution of command ID: ${commandId}`);
-       setLastInfoMessage(`Executing '${commandId}'...`); // Immediate feedback
+       console.log(`Requesting execution of command: ${command.trim()}`);
+       setLastInfoMessage(`Executing command...`); // General feedback
        setLastErrorMessage('');
        socketRef.current.send(JSON.stringify({
            type: 'execute_command',
-           command_id: commandId
+           command: command // Send the command string directly
        }));
     } else {
        console.warn("Cannot execute command: SSH WebSocket not open or not connected.");
        setLastErrorMessage('Cannot execute command: Not connected.');
        setLastInfoMessage('');
-       // TODO: Add user feedback (e.g., toast notification)
     }
   };
+  
 
   // --- Styles --- (Using React.CSSProperties for type safety)
   const buttonStyle: React.CSSProperties = {
