@@ -7,6 +7,7 @@ RUN npm init -y
 
 # Install required backend packages
 RUN npm install express ws ssh2
+RUN npm install dotenv
 
 # Copy server code
 COPY . .

@@ -1,16 +1,47 @@
-version: '3.8'
-
 services:
+  #####################
+  # Backend Service   #
+  #####################
   backend:
-    build: ./backend
+    container_name: robot-backend # Optional: Assign a fixed container name
+    build:
+      context: ./backend      
+      dockerfile: Dockerfile  
     ports:
-      - "5001:5000"
+      - "${PORT}:${PORT}"
     volumes:
       - ./frames:/app/frames
+    env_file:
+      - .env
+    # Connects this service to the custom network defined below
+    networks:
+      - robot-net
 
+  ######################
+  # Frontend Service   #
+  ######################
   frontend:
-    build: ./frontend
+    container_name: robot-frontend 
+    build:
+      context: ./frontend      
+      dockerfile: Dockerfile  
+      args:
+        # Passes arguments from the .env file (in the same directory as this compose file)
+        # into the frontend build process. Your frontend Dockerfile needs matching ARG declarations.
+        - NEXT_PUBLIC_BACKEND_WS_URL=${NEXT_PUBLIC_BACKEND_WS_URL}
+        - NEXT_PUBLIC_GRADIO_URL=${NEXT_PUBLIC_GRADIO_URL}
     ports:
       - "3000:3000"
     depends_on:
       - backend
+    # Connects this service to the custom network defined below
+    networks:
+      - robot-net
+
+
+######################
+# Network Definition #
+######################
+networks:
+  robot-net:
+    driver: bridge # Use the standard Docker bridge network driver

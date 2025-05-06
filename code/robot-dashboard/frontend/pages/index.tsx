@@ -43,14 +43,17 @@ export default function Home() {
   // --- Configuration ---
   const piActionButtons: PiActionButton[] = [
     { id: 'launch_pi_client', label: 'Start Pi Cam Client', title: 'Run python3 pi_client.py &' },
-    { id: 'get_ip', label: 'Get Pi IP', title: 'Run hostname -I' },
+    { id: 'kill_pi_client', label: 'Stop Pi Cam Client', title: 'pkill -f pi_client.py' },
     { id: 'list_home', label: 'List Home Dir', title: 'Run ls -la ~/' },
     // Add more buttons here matching backend allowedCommands keys
   ];
 
-  const gradioUrl = process.env.NEXT_PUBLIC_GRADIO_URL || "http://localhost:7860";
-  const sshWsUrl = process.env.NEXT_PUBLIC_SSH_WS_URL || 'ws://localhost:5001';
-  const liveWsUrl = process.env.NEXT_PUBLIC_LIVE_WS_URL || 'ws://localhost:5001';
+  const backendWsUrl = process.env.NEXT_PUBLIC_BACKEND_WS_URL;
+  // Assuming live feed uses the same WS server for now
+  const liveWsUrl = backendWsUrl;
+  const gradioUrl = process.env.NEXT_PUBLIC_GRADIO_URL;
+  // Use backendWsUrl when creating WebSockets
+  const sshWsUrl = backendWsUrl;
 
   // --- Effects ---
 

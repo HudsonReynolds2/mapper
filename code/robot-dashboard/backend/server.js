@@ -1,4 +1,6 @@
 // server.js
+require('dotenv').config();
+
 const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
@@ -10,7 +12,7 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-const PORT = process.env.PORT || 5000; // Use environment variable or default
+const PORT = process.env.PORT; // Use environment variable or default
 const framesDir = path.join(__dirname, '../frames'); // Adjust path if needed
 
 // Create frames directory if it doesn't exist
