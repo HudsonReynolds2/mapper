@@ -1,4 +1,4 @@
-// RASTICxHackH Spring 2025 - Revised Version
+// Authors: Hudson Reynolds, Some help from Dakota Winslow and ChatGPT.
 // Controls two servos:
 //   - servo1 (on S1, GPIO 18) is controlled by the D-pad:
 //         D-pad RIGHT  -> run belt motor on electromagnet pin
